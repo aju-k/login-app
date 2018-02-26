@@ -23,7 +23,7 @@ class UserValidator {
     Login = (req, res, next) => {
         const session = req.session;
         if (!session.hasOwnProperty('userInfo')) {
-            res.redirect("/user/login");
+            res.redirect("/users/login");
         } else {
             next();
         }

@@ -23,15 +23,15 @@ class UserModel{
 
     List = () =>{
         return new Promise((resolve, reject) =>{
-            let query = "SELECT * FROM Users";
+            let query = "SELECT * FROM users";
             mySqlConnection.query(query, (err, result, fields) =>{
                 if (err) {
                     console.error(`Getting users list - Error-${err}`);
-                    reject({ Error: "Error in getting users list", Success: false });
+                    reject({ Error: "Error in getting users list", status: false });
                 } else if (result.length > 0) {
-                    resolve(result[0]);
+                    resolve({userData: result, status: true});
                 } else {
-                    resolve(false);
+                    resolve({status: false});
                 }
             })    
 

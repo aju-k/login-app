@@ -8,14 +8,12 @@ class UserController{
     CheckLogin = (req, res, next) =>{
         var session = req.session;
         this.userModel.Login(req.body).then((user) => {
-            console.log('userss =>', user)
             if (user === false || user.LoginFail === false) {
                 session.loginError = { message: "Invalid username and password" };
                 res.redirect('/users/login')
             } else {
                 session.userInfo = user;
                 delete session.loginError;
-                console.log('iiii')
                 res.redirect('/users/list');
             }
         }).catch((err) => {
@@ -29,12 +27,14 @@ class UserController{
         })
     };
 
-    ListUser = (req, res, next) =>{
-        this.userModel.List().then((userList) =>{
-            res.render('users/list')
+    List = (req, res, next) =>{
+        this.userModel.List().then((userListData) =>{
+            res.render('user/list', { title: "List of Users", userList: userListData, 
+                    userInfo: req.session.userInfo});
         }).catch((err) =>{
-                res.status(500).send(err);
+            res.status(500).send(err);
         })
+
     };
 
     Logout = (req, res, next) => {
