@@ -1,0 +1,67 @@
+<% include ./partials/header.ejs %>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous"></script> 
+  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('#user-list').DataTable({
+        "scrollY": "auto",
+        "scrollCollapse": true,
+        "paging": true
+      });
+    });
+  </script>
+  <% include ./partials/scripts.ejs %>
+    <% include ./partials/nav.ejs %>
+<div class="container margin-top-50">
+      <h1>
+        <%= title %>
+      </h1>
+      <div>
+        <%if(Error != null){%>
+          <p>
+            <%=Error.message%>
+          </p>
+          <%}%>
+            <p class="error"></p>
+              <table id="user-list" class="display" cellspacing="0" width="100%">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Title of task</th>
+                    <th>Date </th>
+                    <th>Approve</th>
+                    <th>Reject</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if(userList.status == false) {%>
+                    <tr>
+                      <td colspan="5" align="center"> No Records </td>
+                    </tr>
+                    <%} else {
+      for(let i = 0; i < userList.tasks.length; i++){
+        var row = userList.tasks[i]; %>
+                      <tr id="<%=row.UserTaskId%>">
+                        <td>
+                          <%= row.Name %>
+                        </td>
+                        <td>
+                          <%= row.Email %>
+                        </td>
+                        <td>
+                          <!-- <%= row.TaskName %> -->
+                        </td>
+                        <td>
+                          <!-- <%= row.UserCompletedActionDate %> -->
+                        </td>
+                      </tr>
+
+                      <%};
+      } %>
+                </tbody>
+              </table>
+      </div>
+</div>
+<% include ./partials/footer.ejs %>
