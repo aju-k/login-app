@@ -13,3 +13,5 @@ Create users table and add the following fields
   Hobbies
 
 Add your database configration in .env file
+
+Please find the dumb file of project "interviewAppsql"
