@@ -5,9 +5,11 @@ class UserController{
         this.userModel = new UserModel();
     }
 
+    // Check login
     CheckLogin = (req, res, next) =>{
         var session = req.session;
         this.userModel.Login(req.body).then((user) => {
+            console.log('Request body =>',req.body)
             if (user === false || user.LoginFail === false) {
                 session.loginError = { message: "Invalid username and password" };
                 res.redirect('/users/login')
@@ -21,12 +23,34 @@ class UserController{
         });
     };
 
-    RegisterUser = (req, res, next) =>{
-        this.userModel.RegisterUser(userObj).then((res) =>{
-
-        })
+    // Register user page
+    RegisetrUser = (req, res, next) =>{
+        res.render('user/registration', {title: 'Registration'});
     };
 
+    // Create user
+    Signup = (req, res, next) =>{
+        console.log('Request body ===>', req.body);
+        let reqBody = req.body;
+        let userInfoObj = {
+            "first_name": reqBody.firstName,
+            "last_name": reqBody.last_name,
+            "email": reqBody.email,
+            "password": reqBody.password,
+            "date_of_birth": reqBody.date_of_birth,
+            "address": reqBody.address,
+            "hobbies":reqBody.hobbies
+        }
+        this.userModel.SignupUser(userInfoObj).then((resObj) =>{
+            if (resObj.Success){
+                res.redirect('user/login', {message: resObj.Response})
+            }
+        }).catch((err) =>{
+            res.send(err);
+        })
+    }
+
+    // List all users
     List = (req, res, next) =>{
         this.userModel.List().then((userListData) =>{
             res.render('user/list', { title: "List of Users", userList: userListData, 
@@ -37,11 +61,11 @@ class UserController{
 
     };
 
+    // Logout user session
     Logout = (req, res, next) => {
         req.session.destroy();
         res.redirect('/users/login');
     };
 
-    
 };
 export default UserController;

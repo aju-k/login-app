@@ -39,9 +39,28 @@ class UserModel{
         });
     };
 
-    Register = (userObj) =>{
-        return new Promise((resolve, reject) =>{
-
+    SignupUser = (userObj) =>{
+        return new Promise((resolve, reject) => {
+            let sql = `call usp_RegisterUser(?, ?, ?,?)`;
+            mySqlConnection.query(sql,
+                [
+                    userObj.first_name,
+                    userObj.last_name,
+                    userObj.email,
+                    userObj.password,
+                    userObj.date_of_birth,
+                    userObj.address,
+                    userObj.hobbies
+                ], (err, result) => {
+                    if (err) {
+                        logger.info('Error While registering user', err);
+                        reject({ Error: "Error While registering yser", Success: false, Error: true });
+                    }
+                    if (result) {
+                        resolve({ Success: true, Error: false, Response: "User registerd succssfully" });
+                    }
+                }
+            );
         });
     };
  

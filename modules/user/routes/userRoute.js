@@ -16,7 +16,8 @@ router.get("/login", function(req, res, next) {
 
 router.post("/checkLogin", UserValidator.LoginValidation,  userControllerObj.CheckLogin);
 router.get("/list", UserValidator.Login, userControllerObj.List);
-//router.post("/register", UserValidator.Login, userControllerObj.RegisetrUser);
+router.get("/register", userControllerObj.RegisetrUser);
 router.get("/logout", userControllerObj.Logout);
+router.post('/signup', userControllerObj.Signup)
 
 module.exports = router;
