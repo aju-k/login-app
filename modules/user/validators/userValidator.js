@@ -52,7 +52,7 @@ class UserValidator {
     });
 
 
-    UpdateThreadValidation = (req, res, next) => {
+    SignupUserValidation = (req, res, next) => {
         Joi.validate(req.body, this.SignupUserValidationSchema, (err, value) => {
             if (err) {
                 return res.status(400).send({
