@@ -15,9 +15,11 @@ router.get("/login", function(req, res, next) {
 });
 
 router.post("/checkLogin", UserValidator.LoginValidation,  userControllerObj.CheckLogin);
-router.get("/list", UserValidator.Login, userControllerObj.List);
+router.get("/list", UserValidator.CheckAdminLogin, userControllerObj.List);
 router.get("/register", userControllerObj.RegisetrUser);
 router.get("/logout", userControllerObj.Logout);
-router.post('/signup', userControllerObj.Signup)
+router.post('/signup', UserValidator.SignupUserValidation ,userControllerObj.Signup)
+router.get('/profile', UserValidator.CheckUserLogin, userControllerObj.Dashboard)
+router.delete('/delete-profile', UserValidator.CheckUserLogin, userControllerObj.Delete)
 
 module.exports = router;

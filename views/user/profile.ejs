@@ -1,0 +1,87 @@
+<% include ./partials/header.ejs %>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="crossorigin="anonymous"></script> 
+  <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('#user-list').DataTable({
+        "scrollY": "auto",
+        "scrollCollapse": true,
+        "paging": true
+      });
+
+      $('body').on('click', '.deleteAction', function (event) {
+        var taskData = $(this).data()
+        $.ajax({
+          type: 'POST',
+          url: "/users/delete-profile",
+          data: { userId: userId},
+        }).done(function () {
+         
+        });
+      })
+    });
+  </script>
+  <% include ./partials/scripts.ejs %>
+    <% include ./partials/nav.ejs %>
+<div class="container margin-top-50">
+      <h1>
+        <%= title %>
+      </h1>
+      <div>
+        <%if(Error != null){%>
+          <p>
+            <%=Error.message%>
+          </p>
+          <%}%>
+            <p class="error"></p>
+              <table id="user-list" class="display" cellspacing="0" width="100%">
+                <thead>
+                  <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Date of birth</th>
+                    <th>Hobbies</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if(userDetail.length == 0) {%>
+                    <tr>
+                      <td colspan="5" align="center"> No Records </td>
+                    </tr>
+                    <%} else {
+                      <tr id="<%= userDetail.userId%>">
+                        <td>
+                          <%= userDetail.first_name%>
+                        </td>
+                        <td>
+                          <%= userDetail.last_name %>
+                        </td>
+                        <td>
+                          <%= userDetail.email %>
+                        </td>
+                        <td>
+                          <%= userDetail.address %>
+                        </td>
+                        <td>
+                          <%= userDetail.date_of_birth %>
+                        </td>
+                        <td>
+                          <%= userDetail.hobbies %>
+                        </td>
+                        <td>
+                          <span id="editAction">EDIT</span>
+                          <span id="deleteAction">X/span>
+                        </td>
+                        
+                      </tr>
+                      <%};
+      } %>
+                </tbody>
+              </table>
+      </div>
+</div>
+<% include ./partials/footer.ejs %>

@@ -28,5 +28,56 @@ class UserValidator {
             next();
         }
     };
+
+
+
+    SignupUserValidation = (req, res, next) => {
+        const session = req.session;
+        if (!session.hasOwnProperty('userInfo')) {
+            res.redirect("/users/login");
+        } else {
+            next();
+        }
+    };
+
+
+    SignupUserValidationSchema = Joi.object().keys({
+        first_name: Joi.string().required(),
+        last_name: Joi.string().required(),
+        email: Joi.email().required(),
+        password: Joi.string().required(),
+        date_of_birth: Joi.string.required(),
+        address: Joi.string.required(),
+        hobbies: Joi.string.required(),
+    });
+
+
+    UpdateThreadValidation = (req, res, next) => {
+        Joi.validate(req.body, this.SignupUserValidationSchema, (err, value) => {
+            if (err) {
+                return res.status(400).send({
+                    Error: err.details[0].message
+                });
+            }
+            next();
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 export default new UserValidator();
