@@ -2,9 +2,9 @@ import Joi from "joi";
 class UserValidator {
 
     LoginSchema = Joi.object().keys({
-            username: Joi.string().alphanum().min(3).max(30).required(),
-            password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).max(30).required(),
-            submit: Joi.string().required()
+        username: Joi.string().alphanum().min(3).max(30).required(),
+        password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).max(30).required(),
+        submit: Joi.string().required()
 
     });
 
@@ -29,8 +29,6 @@ class UserValidator {
         }
     };
 
-
-
     SignupUserValidation = (req, res, next) => {
         const session = req.session;
         if (!session.hasOwnProperty('userInfo')) {
@@ -42,17 +40,19 @@ class UserValidator {
 
 
     SignupUserValidationSchema = Joi.object().keys({
-        first_name: Joi.string().required(),
-        last_name: Joi.string().required(),
-        email: Joi.email().required(),
+        firstName: Joi.string().required(),
+        lastName: Joi.string().required(),
         password: Joi.string().required(),
-        date_of_birth: Joi.string.required(),
-        address: Joi.string.required(),
-        hobbies: Joi.string.required(),
+        birthDate: Joi.string().required(),
+        address: Joi.string().required(),
+        hobbies: Joi.allow(),
+        email: Joi.string().required(),
+        gender: Joi.string().required()
     });
 
 
     SignupUserValidation = (req, res, next) => {
+        console.log('request body =>', req.body)
         Joi.validate(req.body, this.SignupUserValidationSchema, (err, value) => {
             if (err) {
                 return res.status(400).send({
@@ -61,23 +61,6 @@ class UserValidator {
             }
             next();
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 }
 export default new UserValidator();

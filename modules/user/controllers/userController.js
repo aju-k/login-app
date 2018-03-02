@@ -1,15 +1,15 @@
 import UserModel from "userModule/models/userModel";
 
-class UserController{
-    constructor(){
+class UserController {
+    constructor() {
         this.userModel = new UserModel();
     }
 
     // Check login
-    CheckUserLogin = (req, res, next) =>{
+    CheckUserLogin = (req, res, next) => {
         var session = req.session;
         this.userModel.Login(req.body).then((user) => {
-            console.log('Request body =>',req.body)
+            console.log('Request body =>', req.body)
             if (user === false || user.LoginFail === false) {
                 session.loginError = { message: "Invalid username and password" };
                 res.redirect('/users/login')
@@ -23,11 +23,11 @@ class UserController{
         });
     };
 
-       // Check login
-    CheckAdminLogin = (req, res, next) =>{
+    // Check login
+    CheckAdminLogin = (req, res, next) => {
         var session = req.session;
         this.userModel.AdminLogin(req.body).then((user) => {
-            console.log('Request body =>',req.body)
+            console.log('Request body =>', req.body)
             if (user === false || user.LoginFail === false) {
                 session.loginError = { message: "Invalid username and password" };
                 res.redirect('/users/login')
@@ -43,38 +43,42 @@ class UserController{
 
 
     // Register user page
-    RegisetrUser = (req, res, next) =>{
-        res.render('user/registration', {title: 'Registration'});
+    RegisetrUser = (req, res, next) => {
+        res.render('user/registration', { title: 'Registration' });
     };
 
     // Create user
-    Signup = (req, res, next) =>{
+    Signup = (req, res, next) => {
         console.log('Request body ===>', req.body);
         let reqBody = req.body;
         let userInfoObj = {
             "first_name": reqBody.firstName,
-            "last_name": reqBody.last_name,
+            "last_name": reqBody.lastName,
             "email": reqBody.email,
             "password": reqBody.password,
-            "date_of_birth": reqBody.date_of_birth,
+            "date_of_birth": reqBody.birthDate,
             "address": reqBody.address,
-            "hobbies":reqBody.hobbies
+            "hobbies": reqBody.hobbies
         }
-        this.userModel.SignupUser(userInfoObj).then((resObj) =>{
-            if (resObj.Success){
-                res.redirect('user/login', {message: resObj.Response})
+        this.userModel.SignupUser(userInfoObj).then((resObj) => {
+            console.log('REs object ==>', resObj)
+            if (resObj.Success) {
+                res.redirect('user/login', { message: resObj.Response })
             }
-        }).catch((err) =>{
+        }).catch((err) => {
             res.send(err);
         })
     }
 
     // List all users
-    List = (req, res, next) =>{
-        this.userModel.List().then((userListData) =>{
-            res.render('user/list', { title: "List of Users", userList: userListData, 
-                    userInfo: req.session.userInfo});
-        }).catch((err) =>{
+    List = (req, res, next) => {
+        this.userModel.List().then((userListData) => {
+            res.render('user/list', {
+                title: "List of Users",
+                userList: userListData,
+                userInfo: req.session.userInfo
+            });
+        }).catch((err) => {
             res.status(500).send(err);
         })
 
@@ -86,26 +90,25 @@ class UserController{
         res.redirect('/users/login');
     };
 
-    Profile  = (req, res, next) => {
+    Profile = (req, res, next) => {
         var session = req.session;
-        if (session){
-            this.userModel.GetUserDetails(session.userInfo).then((userInfo) =>{
-                if (userInfo.Success){
-                    res.render('/user/profile', {userDetail: userInfo.Respone});
+        if (session) {
+            this.userModel.GetUserDetails(session.userInfo).then((userInfo) => {
+                if (userInfo.Success) {
+                    res.render('/user/profile', { userDetail: userInfo.Respone });
                 }
             })
         }
     };
 
-    Delete = (req, res, next) =>{
-         this.userModel.Delete().then((userId) =>{
+    Delete = (req, res, next) => {
+        this.userModel.Delete().then((userId) => {
             req.session.destroy();
             res.redirect('/users/login');
-        }).catch((err) =>{
+        }).catch((err) => {
             res.status(500).send(err);
         })
     }
-
 
 };
 export default UserController;
